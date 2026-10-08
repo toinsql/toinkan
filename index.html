@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="pt-BR" id="htmlRoot">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title data-pt="ToinkanAI — Seu plano de estudos, montado por IA" data-en="ToinkanAI — Your study plan, built by AI">ToinkanAI — Seu plano de estudos, montado por IA</title>
+<meta name="description" data-pt="O ToinkanAI usa IA para montar um plano de estudos semanal que cabe na sua rotina. Você diz o que precisa aprender, nós organizamos o caminho." data-en="ToinkanAI uses AI to build a weekly study plan that fits your routine. You say what you need to learn, we organize the path." content="O ToinkanAI usa IA para montar um plano de estudos semanal que cabe na sua rotina. Você diz o que precisa aprender, nós organizamos o caminho.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,400;7..72,600;7..72,700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#F5F0E1; --beige:#E8DCC4; --coral:#F4A261; --gold:#E9C46A;
+    --mint:#A8DADC; --teal:#264653; --ink:#161616;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{font-family:'Poppins',sans-serif;background:var(--cream);color:var(--teal);overflow-x:hidden;line-height:1.6}
+  h1,h2,h3{font-family:'Literata',serif;font-weight:700;line-height:1.12}
+  .container{max-width:1120px;margin:0 auto;padding:0 24px}
+
+  /* ---------- NAV ---------- */
+  nav{position:fixed;top:20px;left:50%;transform:translateX(-50%);z-index:50;
+      display:flex;align-items:center;gap:22px;padding:10px 14px 10px 24px;
+      background:rgba(245,240,225,.86);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+      border-radius:999px;border:1.5px solid rgba(38,70,83,.14);
+      box-shadow:0 8px 30px rgba(38,70,83,.10);transition:box-shadow .3s}
+  nav .logo{font-family:'Literata',serif;font-weight:700;font-size:1.15rem;letter-spacing:-.01em;color:var(--teal);text-decoration:none;display:flex;align-items:center;gap:9px}
+  nav .logo svg{display:block}
+  nav .links{display:flex;gap:20px}
+  nav .links a{font-size:.85rem;font-weight:500;color:var(--teal);text-decoration:none;opacity:.75;transition:opacity .2s}
+  nav .links a:hover{opacity:1}
+  .btn{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:.85rem;text-decoration:none;
+       padding:11px 22px;border-radius:999px;border:none;cursor:pointer;transition:transform .2s,box-shadow .2s,background .2s}
+  .btn-dark{background:var(--ink);color:#fff}
+  .btn-dark:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(22,22,22,.22)}
+  .btn-coral{background:var(--coral);color:var(--ink)}
+  .btn-coral:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(244,162,97,.45)}
+  @media(max-width:720px){nav .links{display:none}}
+
+  /* ---------- HERO ---------- */
+  .hero{background:var(--beige);padding:170px 0 90px;position:relative}
+  .hero .container{display:flex;flex-direction:column;align-items:center;text-align:center}
+  .badge{display:inline-flex;align-items:center;gap:8px;background:#fff;border:1.5px solid rgba(38,70,83,.16);
+         border-radius:999px;padding:7px 16px;font-size:.78rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--teal);margin-bottom:28px}
+  .badge .dot{width:8px;height:8px;border-radius:50%;background:var(--coral)}
+  .hero h1{font-size:clamp(2.6rem,6.2vw,4.6rem);letter-spacing:-.02em;max-width:16ch;color:var(--ink)}
+  .hero h1 .hl{background:linear-gradient(transparent 62%,var(--gold) 62%);padding:0 .08em}
+  .hero p{max-width:52ch;margin:24px auto 34px;font-size:1.06rem;opacity:.82}
+  .hero .cta-row{display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
+  .hero .note{margin-top:18px;font-size:.8rem;opacity:.6}
+
+  /* planner mockup */
+  .planner-wrap{margin-top:64px;position:relative;width:100%;display:flex;justify-content:center}
+  .planner{background:#fff;border:2px solid var(--teal);border-radius:26px;width:min(720px,100%);
+           box-shadow:10px 12px 0 rgba(38,70,83,.15);transform:rotate(-1.4deg);
+           padding:26px 26px 22px;text-align:left;transition:transform .4s}
+  .planner:hover{transform:rotate(-.4deg) translateY(-4px)}
+  .planner-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px}
+  .planner-head h3{font-size:1.15rem;color:var(--ink)}
+  .planner-head .tag{font-size:.7rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+                     background:var(--mint);color:var(--teal);padding:5px 12px;border-radius:999px}
+  .week{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
+  .day{background:var(--cream);border-radius:14px;padding:10px 8px;display:flex;flex-direction:column;gap:6px;min-height:118px}
+  .day .d{font-size:.62rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;opacity:.55}
+  .task{border-radius:9px;padding:5px 7px;font-size:.62rem;font-weight:500;line-height:1.3}
+  .t-coral{background:var(--coral);color:var(--ink)}
+  .t-gold{background:var(--gold);color:var(--ink)}
+  .t-mint{background:var(--mint);color:var(--teal)}
+  .t-outline{background:transparent;border:1.5px dashed rgba(38,70,83,.4);color:var(--teal)}
+  .planner-foot{margin-top:16px;display:flex;align-items:center;gap:10px;font-size:.75rem;opacity:.7}
+  .planner-foot svg{flex-shrink:0}
+  @media(max-width:640px){.week{grid-template-columns:repeat(7,1fr);gap:5px}.day{min-height:92px;padding:8px 5px}.task{font-size:.52rem}}
+
+  .doodle{position:absolute;pointer-events:none}
+  .doodle-arrow{top:-52px;right:6%;transform:rotate(12deg)}
+  .doodle-star{top:-30px;left:8%;transform:rotate(-10deg)}
+  @media(max-width:900px){.doodle{display:none}}
+
+  /* ---------- WAVE DIVIDERS ---------- */
+  .wave{display:block;width:100%;height:70px;margin-bottom:-1px}
+
+  /* ---------- SECTIONS ---------- */
+  section{padding:96px 0}
+  .section-kicker{font-size:.78rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--coral);margin-bottom:14px}
+  .section-title{font-size:clamp(1.9rem,4vw,2.9rem);letter-spacing:-.015em;color:var(--ink);max-width:20ch}
+  .section-sub{margin-top:16px;max-width:56ch;opacity:.8}
+
+  .split{display:grid;grid-template-columns:1.1fr .9fr;gap:64px;align-items:center}
+  @media(max-width:860px){.split{grid-template-columns:1fr;gap:44px}}
+
+  /* feature list */
+  .feat-list{display:flex;flex-direction:column;gap:0;margin-top:34px}
+  .feat{display:flex;gap:20px;padding:26px 0;border-top:1.5px solid rgba(38,70,83,.16)}
+  .feat:last-child{border-bottom:1.5px solid rgba(38,70,83,.16)}
+  .feat .num{font-family:'Literata',serif;font-weight:700;font-size:1.4rem;color:var(--coral);min-width:44px}
+  .feat h3{font-size:1.12rem;color:var(--ink);margin-bottom:6px}
+  .feat p{font-size:.92rem;opacity:.78}
+
+  /* chat mock */
+  .chat{background:#fff;border:2px solid var(--teal);border-radius:26px;box-shadow:10px 12px 0 rgba(38,70,83,.15);
+        padding:24px;transform:rotate(1.2deg)}
+  .msg{border-radius:16px;padding:13px 16px;font-size:.88rem;margin-bottom:12px;max-width:88%}
+  .msg.user{background:var(--beige);margin-left:auto;border-bottom-right-radius:4px}
+  .msg.ai{background:var(--mint);border-bottom-left-radius:4px}
+  .msg .who{font-size:.65rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;opacity:.55;margin-bottom:4px}
+  .typing{display:inline-flex;gap:4px;padding:6px 2px}
+  .typing span{width:6px;height:6px;border-radius:50%;background:var(--teal);opacity:.35;animation:blink 1.2s infinite}
+  .typing span:nth-child(2){animation-delay:.2s}.typing span:nth-child(3){animation-delay:.4s}
+  @keyframes blink{0%,80%,100%{opacity:.25}40%{opacity:.9}}
+
+  /* steps section (gold) */
+  .steps{background:var(--gold)}
+  .steps .section-title{color:var(--ink)}
+  .steps-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:52px}
+  @media(max-width:860px){.steps-grid{grid-template-columns:1fr}}
+  .step-card{background:rgba(255,255,255,.55);border-radius:22px;padding:30px 26px;border:1.5px solid rgba(38,70,83,.12)}
+  .step-card .step-num{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:50%;
+                       background:var(--ink);color:#fff;font-family:'Literata',serif;font-weight:700;font-size:1.1rem;margin-bottom:18px}
+  .step-card h3{font-size:1.15rem;color:var(--ink);margin-bottom:8px}
+  .step-card p{font-size:.9rem;opacity:.85}
+
+  /* mission circle (mint) */
+  .mission-outer{padding:96px 24px}
+  .mission{background:var(--mint);border-radius:48px;max-width:900px;margin:0 auto;padding:84px 48px;text-align:center;position:relative}
+  .mission h2{font-size:clamp(1.7rem,3.6vw,2.5rem);color:var(--teal);max-width:26ch;margin:0 auto}
+  .mission p{margin:20px auto 0;max-width:52ch;opacity:.8}
+  .mission .scribble{position:absolute;top:-26px;right:44px;transform:rotate(8deg)}
+
+  /* FAQ */
+  .faq-item{border-top:1.5px solid rgba(38,70,83,.16)}
+  .faq-item:last-child{border-bottom:1.5px solid rgba(38,70,83,.16)}
+  .faq-q{width:100%;background:none;border:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:20px;
+         padding:24px 4px;text-align:left;font-family:'Literata',serif;font-weight:600;font-size:1.1rem;color:var(--ink)}
+  .faq-q .chev{transition:transform .3s;flex-shrink:0}
+  .faq-item.open .chev{transform:rotate(45deg)}
+  .faq-a{max-height:0;overflow:hidden;transition:max-height .4s ease}
+  .faq-a p{padding:0 4px 24px;font-size:.93rem;opacity:.8;max-width:70ch}
+
+  /* final CTA */
+  .final{background:var(--teal);color:var(--cream);text-align:center;padding:110px 24px}
+  .final h2{font-size:clamp(2rem,5vw,3.4rem);color:#fff;max-width:18ch;margin:0 auto 20px;letter-spacing:-.02em}
+  .final p{opacity:.75;max-width:46ch;margin:0 auto 36px}
+  .final .btn-coral{font-size:.95rem;padding:14px 30px}
+
+  footer{background:var(--teal);color:var(--cream);border-top:1.5px solid rgba(245,240,225,.15);padding:44px 24px}
+  footer .container{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;max-width:1120px}
+  footer .f-logo{font-family:'Literata',serif;font-weight:700;font-size:1.05rem}
+  footer a{color:var(--cream);text-decoration:none;opacity:.75;font-size:.85rem}
+  footer a:hover{opacity:1}
+  footer .small{font-size:.78rem;opacity:.55}
+
+  /* lang toggle */
+  .lang-toggle{display:flex;background:rgba(38,70,83,.08);border-radius:999px;padding:3px;gap:2px}
+  .lang-toggle button{border:none;background:transparent;cursor:pointer;font-family:'Poppins',sans-serif;
+                      font-size:.72rem;font-weight:600;letter-spacing:.04em;color:var(--teal);
+                      padding:5px 11px;border-radius:999px;opacity:.55;transition:all .2s}
+  .lang-toggle button.active{background:var(--teal);color:#fff;opacity:1}
+
+  /* ---------- MODAL BETA ---------- */
+  .modal-overlay{position:fixed;inset:0;background:rgba(38,70,83,.45);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+                 z-index:100;display:flex;align-items:center;justify-content:center;padding:20px;
+                 opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s}
+  .modal-overlay.open{opacity:1;visibility:visible}
+  .modal{background:var(--cream);border:2px solid var(--teal);border-radius:28px;max-width:440px;width:100%;
+         padding:38px 34px 32px;position:relative;box-shadow:12px 14px 0 rgba(38,70,83,.2);
+         transform:translateY(24px) rotate(-.6deg);transition:transform .35s}
+  .modal-overlay.open .modal{transform:translateY(0) rotate(-.6deg)}
+  .modal-close{position:absolute;top:16px;right:16px;background:none;border:none;cursor:pointer;padding:6px;line-height:0;opacity:.6;transition:opacity .2s}
+  .modal-close:hover{opacity:1}
+  .modal h3{font-size:1.5rem;color:var(--ink);margin-bottom:8px;letter-spacing:-.01em}
+  .modal .modal-sub{font-size:.9rem;opacity:.75;margin-bottom:24px}
+  .modal label{display:block;font-size:.75rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;opacity:.65;margin:0 0 6px 2px}
+  .modal input{width:100%;background:#fff;border:1.5px solid rgba(38,70,83,.3);border-radius:14px;
+               padding:13px 16px;font-family:'Poppins',sans-serif;font-size:.95rem;color:var(--teal);
+               margin-bottom:18px;outline:none;transition:border-color .2s,box-shadow .2s}
+  .modal input:focus{border-color:var(--coral);box-shadow:0 0 0 3px rgba(244,162,97,.25)}
+  .modal .btn-coral{width:100%;justify-content:center;font-size:.95rem;padding:14px}
+  .modal .privacy{margin-top:14px;font-size:.72rem;opacity:.55;text-align:center}
+  .modal .success{display:none;text-align:center;padding:20px 0 8px}
+  .modal .success svg{margin-bottom:16px}
+  .modal .success h3{margin-bottom:6px}
+  .modal .success p{font-size:.9rem;opacity:.75}
+
+  /* reveal animation */
+  .reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease}
+  .reveal.visible{opacity:1;transform:none}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="logo" href="#">
+    <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+      <rect x="1.5" y="3" width="19" height="15.5" rx="3.5" stroke="#264653" stroke-width="2"/>
+      <path d="M5 8.5h7M5 12h4.5" stroke="#F4A261" stroke-width="2" stroke-linecap="round"/>
+      <circle cx="16.5" cy="8.5" r="1.6" fill="#E9C46A"/>
+    </svg>
+    ToinkanAI
+  </a>
+  <div class="lang-toggle">
+    <button id="langPt" class="active">PT</button>
+    <button id="langEn">EN</button>
+  </div>
+  <div class="links">
+    <a href="#como" data-en="How it works">Como funciona</a>
+    <a href="#passos" data-en="First steps">Primeiros passos</a>
+    <a href="#faq" data-en="FAQ">Dúvidas</a>
+  </div>
+  <a class="btn btn-dark" href="#comecar" data-open-modal data-en="Join the waitlist">Entrar na lista</a>
+</nav>
+
+<!-- ================= HERO ================= -->
+<header class="hero">
+  <div class="container">
+    <span class="badge"><span class="dot"></span><span data-en="AI study planner · beta">Planner de estudos com IA · beta</span></span>
+    <h1><span data-en="You say what you want to learn.">Você diz o que quer aprender.</span> <span class="hl" data-en="AI builds the plan.">A IA monta o plano.</span></h1>
+    <p data-en="ToinkanAI turns your goal — acing the entrance exam, mastering a language, finishing that course — into a weekly study plan that truly fits your routine.">O ToinkanAI transforma seu objetivo — passar no vestibular, dominar uma linguagem, terminar aquele curso — em um plano de estudos semanal que cabe de verdade na sua rotina.</p>
+    <div class="cta-row">
+      <a class="btn btn-coral" href="#comecar" data-open-modal data-en="Get my plan">Quero meu plano</a>
+      <a class="btn btn-dark" href="#como" style="background:transparent;color:var(--teal);border:1.5px solid var(--teal)" data-en="See how it works">Ver como funciona</a>
+    </div>
+    <p class="note" data-en="Free during beta · no credit card required">Grátis durante o beta · sem cartão de crédito</p>
+
+    <div class="planner-wrap">
+      <svg class="doodle doodle-star" width="54" height="54" viewBox="0 0 54 54" fill="none">
+        <path d="M27 4l5.4 14.6L48 21l-12 9.6 4 15.4L27 36.8 14 46l4-15.4L6 21l15.6-2.4z" stroke="#F4A261" stroke-width="3" stroke-linejoin="round"/>
+      </svg>
+      <svg class="doodle doodle-arrow" width="110" height="80" viewBox="0 0 110 80" fill="none">
+        <path d="M6 8c30 4 60 18 78 52" stroke="#264653" stroke-width="3" stroke-linecap="round" fill="none"/>
+        <path d="M88 46l-2 16-14-8" stroke="#264653" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <text x="8" y="26" font-family="Poppins" font-size="11" fill="#264653" transform="rotate(14 8 26)" data-en="generated by AI">gerado pela IA</text>
+      </svg>
+
+      <div class="planner">
+        <div class="planner-head">
+          <h3 data-en="Your week · Civil service exam">Sua semana · Concurso TJ</h3>
+          <span class="tag" data-en="Reviewed today at 7am">Revisado hoje às 7h</span>
+        </div>
+        <div class="week">
+          <div class="day"><span class="d" data-en="Mon">Seg</span><span class="task t-coral" data-en="Constitutional Law · 1h30">Direito Constitucional · 1h30</span><span class="task t-gold" data-en="30 practice questions">30 questões</span></div>
+          <div class="day"><span class="d" data-en="Tue">Ter</span><span class="task t-mint" data-en="Portuguese: syntax · 1h">Português: sintaxe · 1h</span></div>
+          <div class="day"><span class="d" data-en="Wed">Qua</span><span class="task t-coral" data-en="Constitutional: review · 45min">Constitucional: revisão · 45min</span><span class="task t-outline" data-en="Break at 8pm">Folga 20h</span></div>
+          <div class="day"><span class="d" data-en="Thu">Qui</span><span class="task t-gold" data-en="Logical reasoning · 1h">Raciocínio lógico · 1h</span><span class="task t-mint" data-en="Flashcards · 20min">Flashcards · 20min</span></div>
+          <div class="day"><span class="d" data-en="Fri">Sex</span><span class="task t-coral" data-en="Mock exam · 2h">Simulado · 2h</span></div>
+          <div class="day"><span class="d" data-en="Sat">Sáb</span><span class="task t-mint" data-en="Mock exam review · 1h">Correção do simulado · 1h</span></div>
+          <div class="day"><span class="d" data-en="Sun">Dom</span><span class="task t-outline" data-en="Rest day">Descanso</span></div>
+        </div>
+        <div class="planner-foot">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1.5l1.8 3.9 4.2.5-3.1 2.9.8 4.2L8 11l-3.7 2 .8-4.2L2 5.9l4.2-.5z" stroke="#F4A261" stroke-width="1.4" stroke-linejoin="round"/></svg>
+          <span data-en="The AI noticed you focus best in the morning and front-loaded the heavy content before 10am.">A IA percebeu que você rende mais de manhã e concentrou o conteúdo pesado antes das 10h.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<svg class="wave" viewBox="0 0 1440 70" preserveAspectRatio="none"><path d="M0 70V38C120 12 260 6 420 22s300 34 470 22 330-30 550-6v32z" fill="#F5F0E1"/><path d="M0 70V50c160-22 320-26 480-10s300 28 470 16 320-24 490-6v20z" fill="#F5F0E1" opacity=".55"/></svg>
+
+<!-- ================= COMO FUNCIONA ================= -->
+<section id="como">
+  <div class="container split">
+    <div class="reveal">
+      <p class="section-kicker" data-en="How it works">Como funciona</p>
+      <h2 class="section-title" data-en="Less time planning, more time studying">Menos tempo planejando, mais tempo estudando</h2>
+      <div class="feat-list">
+        <div class="feat">
+          <span class="num">01</span>
+          <div>
+            <h3 data-en="You share your goal">Você conta seu objetivo</h3>
+            <p data-en="Entrance exams, certifications, or that course you paused months ago. In a simple conversation, the AI understands your deadline, your current level and how much time you have per day.">Vestibular, concurso, certificação ou aquele curso parado há meses. Em uma conversa simples, a IA entende seu prazo, seu nível atual e quanto tempo você tem por dia.</p>
+          </div>
+        </div>
+        <div class="feat">
+          <span class="num">02</span>
+          <div>
+            <h3 data-en="AI breaks it into weekly sessions">A IA divide tudo em sessões semanais</h3>
+            <p data-en="Your content becomes a schedule of short, realistic sessions — with spaced repetition automatically placed on the right days.">O conteúdo vira um cronograma com sessões curtas e realistas — com revisões espaçadas encaixadas automaticamente nos dias certos.</p>
+          </div>
+        </div>
+        <div class="feat">
+          <span class="num">03</span>
+          <div>
+            <h3 data-en="The plan adapts every week">O plano se adapta toda semana</h3>
+            <p data-en="Missed a day? No drama. ToinkanAI redistributes what fell behind and adjusts the pace — no manual rework needed.">Furou um dia? Sem drama. O ToinkanAI redistribui o que ficou pra trás e ajusta o ritmo sem você precisar refazer nada na mão.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="reveal">
+      <div class="chat">
+        <div class="msg user"><div class="who" data-en="You">Você</div><span data-en="I have 1 hour a day and want to pass the civil service exam in 6 months. Starting from zero.">Tenho 1h por dia e quero passar no concurso do TJ em 6 meses. Tô começando do zero.</span></div>
+        <div class="msg ai"><div class="who">ToinkanAI</div><span data-en="Perfect. With 1h/day, we can cover the full syllabus comfortably if we distribute it well. Want your plan with 3 subjects per week and reviews on Wednesdays?">Perfeito. Com 1h/dia, dá pra cobrir o edital com folga se distribuirmos direito. Monte seu plano com 3 matérias por semana e revisões às quartas?</span></div>
+        <div class="msg user"><div class="who" data-en="You">Você</div><span data-en="Sure. But mornings don't work for me.">Pode ser. Mas de manhã eu não consigo.</span></div>
+        <div class="msg ai"><div class="who">ToinkanAI</div><span data-en="No problem — I scheduled all sessions between 7pm and 8:30pm, and moved the heaviest content to weekends. Your weekly plan is ready.">Sem problema — deixei todas as sessões entre 19h e 20h30, e concentrei o conteúdo mais pesado nos fins de semana. Seu plano da semana já está pronto.</span> <span class="typing"><span></span><span></span><span></span></span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<svg class="wave" viewBox="0 0 1440 70" preserveAspectRatio="none" style="margin-top:-1px"><path d="M0 0v32c180 20 340 26 500 12s320-30 480-16 300 22 460 8V0z" fill="#E9C46A"/></svg>
+
+<!-- ================= PASSOS ================= -->
+<section class="steps" id="passos" style="padding-top:70px">
+  <div class="container">
+    <p class="section-kicker" style="color:var(--teal)" data-en="First steps">Primeiros passos</p>
+    <h2 class="section-title" data-en="From zero to a ready plan in 5 minutes">Do zero ao plano pronto em 5 minutos</h2>
+    <div class="steps-grid">
+      <div class="step-card reveal">
+        <span class="step-num">1</span>
+        <h3 data-en="Set the goal">Defina a meta</h3>
+        <p data-en="Exam name, test date or project deadline. That's all it takes to start.">Nome do exame, data da prova ou prazo do projeto. Só isso já basta pra começar.</p>
+      </div>
+      <div class="step-card reveal">
+        <span class="step-num">2</span>
+        <h3 data-en="Share your routine">Fale da sua rotina</h3>
+        <p data-en="How many hours a day, which days of the week, when you focus best. The AI respects your real life.">Quantas horas por dia, quais dias da semana, quando você rende mais. A IA respeita sua vida real.</p>
+      </div>
+      <div class="step-card reveal">
+        <span class="step-num">3</span>
+        <h3 data-en="Start studying">Comece a estudar</h3>
+        <p data-en="Your first weekly plan appears instantly. Check off sessions as you go and leave the rest to us.">Seu primeiro plano semanal aparece na hora. Marque as sessões conforme avança e deixe o resto com a gente.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<svg class="wave" viewBox="0 0 1440 70" preserveAspectRatio="none"><path d="M0 0v30c200 18 380 24 560 10s340-28 520-14 240 18 360 12V0z" fill="#E9C46A" transform="translate(0,0)"/><path d="M0 70V34c160-18 320-24 480-8s320 30 480 16 300-24 480-8v36z" fill="#F5F0E1"/></svg>
+
+<!-- ================= MISSÃO ================= -->
+<div class="mission-outer">
+  <div class="mission reveal">
+    <svg class="scribble" width="70" height="52" viewBox="0 0 70 52" fill="none">
+      <path d="M6 40c10-22 24-32 38-30 10 1.4 14 10 10 18-3.4 7-12 8-16 3" stroke="#F4A261" stroke-width="3.4" stroke-linecap="round" fill="none"/>
+      <path d="M30 26l9 6 3-11" stroke="#F4A261" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    </svg>
+    <h2 data-en="We believe lack of organization is not lack of discipline.">A gente acredita que falta de organização não é falta de disciplina.</h2>
+    <p data-en="Most people don't quit studying out of laziness — they quit because the plan was unrealistic. ToinkanAI was born to fix that: an honest plan that fits your life and changes with it.">A maioria das pessoas não abandona os estudos por preguiça — abandona porque o plano era irreal. O ToinkanAI nasceu pra resolver isso: um plano honesto, que cabe na sua vida e muda junto com ela.</p>
+  </div>
+</div>
+
+<!-- ================= FAQ ================= -->
+<section id="faq" style="padding-top:40px">
+  <div class="container">
+    <p class="section-kicker" data-en="Frequently asked questions">Dúvidas frequentes</p>
+    <h2 class="section-title" data-en="Questions people always ask">Perguntas que sempre fazem</h2>
+    <div style="margin-top:40px" class="reveal">
+      <div class="faq-item">
+        <button class="faq-q"><span data-en="Do I need to pay to use it?">Preciso pagar pra usar?</span><svg class="chev" width="18" height="18" viewBox="0 0 18 18"><path d="M9 3v12M3 9h12" stroke="#264653" stroke-width="2.2" stroke-linecap="round"/></svg></button>
+        <div class="faq-a"><p data-en="Not during the beta. We plan to keep a generous free tier even after launch, with advanced features in an affordable paid plan.">Não durante o beta. Nossa ideia é manter um plano gratuito generoso mesmo depois do lançamento, com recursos avançados em um plano pago acessível.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q"><span data-en="Does it work for any kind of study?">Serve pra qualquer tipo de estudo?</span><svg class="chev" width="18" height="18" viewBox="0 0 18 18"><path d="M9 3v12M3 9h12" stroke="#264653" stroke-width="2.2" stroke-linecap="round"/></svg></button>
+        <div class="faq-a"><p data-en="Yes. Exams, languages, programming, certifications — any goal with defined content becomes a plan. You describe the goal in plain language and the AI structures the path.">Sim. Concursos, vestibulares, idiomas, programação, certificações — qualquer objetivo com conteúdo definido vira um plano. Você descreve a meta em linguagem natural e a IA estrutura o caminho.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q"><span data-en="What if I fall behind schedule?">E se eu atrasar o cronograma?</span><svg class="chev" width="18" height="18" viewBox="0 0 18 18"><path d="M9 3v12M3 9h12" stroke="#264653" stroke-width="2.2" stroke-linecap="round"/></svg></button>
+        <div class="faq-a"><p data-en="No broken plans piling up guilt. ToinkanAI automatically recalculates: it redistributes pending sessions and adjusts reviews, keeping the final goal always in sight.">Nada de plano furado acumulando culpa. O ToinkanAI recalcula a rota automaticamente: redistribui as sessões pendentes e ajusta as revisões, mantendo a meta final sempre visível.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CTA FINAL ================= -->
+<div class="final" id="comecar">
+  <h2 data-en="Your next study plan builds itself.">Seu próximo plano de estudos se monta sozinho.</h2>
+  <p data-en="Join the beta waitlist and be one of the first to study with a plan made for your routine — not against it.">Entre na lista do beta e seja uma das primeiras pessoas a estudar com um plano feito pra sua rotina — e não contra ela.</p>
+  <a class="btn btn-coral" href="#comecar" data-open-modal data-en="Join the beta waitlist">Entrar na lista do beta</a>
+</div>
+
+<!-- ================= MODAL BETA ================= -->
+<div class="modal-overlay" id="betaModal">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <button class="modal-close" id="modalClose" aria-label="Fechar">
+      <svg width="20" height="20" viewBox="0 0 20 20"><path d="M4 4l12 12M16 4L4 16" stroke="#264653" stroke-width="2.4" stroke-linecap="round"/></svg>
+    </button>
+    <div id="modalForm">
+      <h3 id="modalTitle" data-en="Join the beta waitlist">Entre na lista do beta</h3>
+      <p class="modal-sub" data-en="Leave your email and we'll let you know as soon as ToinkanAI opens its doors.">Deixe seu e-mail e a gente te avisa assim que o ToinkanAI abrir as portas.</p>
+      <form id="betaForm" novalidate>
+        <label for="betaName" data-en="Your name">Seu nome</label>
+        <input type="text" id="betaName" name="name" data-pt-ph="Como podemos te chamar?" placeholder="Como podemos te chamar?" data-en-ph="What can we call you?" required>
+        <label for="betaEmail" data-en="Your best email">Seu melhor e-mail</label>
+        <input type="email" id="betaEmail" name="email" data-pt-ph="voce@exemplo.com" placeholder="voce@exemplo.com" data-en-ph="you@example.com" required>
+        <button type="submit" class="btn btn-coral" id="betaSubmit" data-en="Join the waitlist">Quero entrar na lista</button>
+      </form>
+      <p class="privacy" data-en="No spam, we promise. Just launch updates.">Sem spam, prometido. Só avisos sobre o lançamento.</p>
+    </div>
+    <div class="success" id="modalSuccess">
+      <svg width="52" height="52" viewBox="0 0 52 52" fill="none">
+        <circle cx="26" cy="26" r="24" stroke="#F4A261" stroke-width="3"/>
+        <path d="M15 27l7.5 7.5L37 19" stroke="#264653" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <h3 data-en="You're on the list!">Você está na lista!</h3>
+      <p data-en="We'll email you as soon as the beta opens. Until then, happy studying.">Vamos te avisar por e-mail assim que o beta abrir. Até lá, bons estudos.</p>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="container">
+    <span class="f-logo">ToinkanAI</span>
+    <a href="mailto:contato@toinkanai.com">contato@toinkanai.com</a>
+    <span class="small" data-en="© 2026 ToinkanAI · Made with care in Brazil">© 2026 ToinkanAI · Feito com carinho no Brasil</span>
+  </div>
+</footer>
+
+<script>
+  // reveal on scroll
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('visible'); io.unobserve(e.target);} });
+  },{threshold:.15});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+  // language toggle
+  const translatables = document.querySelectorAll('[data-en]');
+  translatables.forEach(el=>{ el.dataset.pt = el.innerHTML; });
+  const setLang = (lang)=>{
+    translatables.forEach(el=>{ el.innerHTML = lang==='en' ? el.dataset.en : el.dataset.pt; });
+    document.querySelectorAll('[data-en-ph]').forEach(el=>{
+      if(!el.dataset.ptPh) el.dataset.ptPh = el.getAttribute('data-pt-ph') || 'Como podemos te chamar?';
+      el.placeholder = lang==='en' ? el.dataset.enPh : el.dataset.ptPh;
+    });
+    const t = document.querySelector('title'); t.textContent = lang==='en' ? t.dataset.en : t.dataset.pt;
+    const m = document.querySelector('meta[name=description]'); m.setAttribute('content', lang==='en' ? m.dataset.en : m.dataset.pt);
+    document.documentElement.lang = lang==='en' ? 'en' : 'pt-BR';
+    document.getElementById('langPt').classList.toggle('active', lang!=='en');
+    document.getElementById('langEn').classList.toggle('active', lang==='en');
+  };
+  document.getElementById('langPt').addEventListener('click',()=>setLang('pt'));
+  document.getElementById('langEn').addEventListener('click',()=>setLang('en'));
+
+  // beta modal
+  // Para receber os e-mails de verdade: crie um form grátis em formspree.io
+  // apontando pro seu e-mail e cole a URL gerada abaixo (ex: https://formspree.io/f/abcdwxyz)
+  const FORMSPREE_ENDPOINT = "";
+  const overlay = document.getElementById('betaModal');
+  const openModal = ()=>{ overlay.classList.add('open'); document.body.style.overflow='hidden'; setTimeout(()=>document.getElementById('betaName').focus(),350); };
+  const closeModal = ()=>{ overlay.classList.remove('open'); document.body.style.overflow=''; };
+  document.querySelectorAll('[data-open-modal]').forEach(el=>el.addEventListener('click',e=>{ e.preventDefault(); openModal(); }));
+  document.getElementById('modalClose').addEventListener('click',closeModal);
+  overlay.addEventListener('click',e=>{ if(e.target===overlay) closeModal(); });
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeModal(); });
+
+  document.getElementById('betaForm').addEventListener('submit', async (e)=>{
+    e.preventDefault();
+    const name = document.getElementById('betaName').value.trim();
+    const email = document.getElementById('betaEmail').value.trim();
+    const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
+    if(!name || !emailOk){
+      (!name ? document.getElementById('betaName') : document.getElementById('betaEmail')).focus();
+      return;
+    }
+    const btn = document.getElementById('betaSubmit');
+    btn.textContent = 'Enviando...'; btn.disabled = true;
+    try{
+      if(FORMSPREE_ENDPOINT){
+        await fetch(FORMSPREE_ENDPOINT, {
+          method:'POST',
+          headers:{'Content-Type':'application/json','Accept':'application/json'},
+          body: JSON.stringify({name, email, _subject:'Novo cadastro no beta do ToinkanAI'})
+        });
+      }
+    }catch(err){ /* mesmo com falha de rede, mostra confirmação */ }
+    document.getElementById('modalForm').style.display='none';
+    document.getElementById('modalSuccess').style.display='block';
+  });
+
+  // faq accordion
+  document.querySelectorAll('.faq-q').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const item = btn.parentElement, a = item.querySelector('.faq-a');
+      const open = item.classList.contains('open');
+      document.querySelectorAll('.faq-item.open').forEach(i=>{ i.classList.remove('open'); i.querySelector('.faq-a').style.maxHeight = null; });
+      if(!open){ item.classList.add('open'); a.style.maxHeight = a.scrollHeight + 'px'; }
+    });
+  });
+</script>
+</body>
+</html>
