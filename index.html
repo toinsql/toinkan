@@ -19,7 +19,7 @@
   h1,h2,h3{font-family:'Literata',serif;font-weight:700;line-height:1.12}
   .container{max-width:1120px;margin:0 auto;padding:0 24px}
 
-  /* ---------- NAV ---------- */
+  /* NAV */
   nav{position:fixed;top:20px;left:50%;transform:translateX(-50%);z-index:50;
       display:flex;align-items:center;gap:22px;padding:10px 14px 10px 24px;
       background:rgba(245,240,225,.86);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
@@ -38,7 +38,7 @@
   .btn-coral:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(244,162,97,.45)}
   @media(max-width:720px){nav .links{display:none}}
 
-  /* ---------- HERO ---------- */
+  /* HERO */
   .hero{background:var(--beige);padding:170px 0 90px;position:relative}
   .hero .container{display:flex;flex-direction:column;align-items:center;text-align:center}
   .badge{display:inline-flex;align-items:center;gap:8px;background:#fff;border:1.5px solid rgba(38,70,83,.16);
@@ -77,10 +77,10 @@
   .doodle-star{top:-30px;left:8%;transform:rotate(-10deg)}
   @media(max-width:900px){.doodle{display:none}}
 
-  /* ---------- WAVE DIVIDERS ---------- */
+  /* WAVE DIVIDERS */
   .wave{display:block;width:100%;height:70px;margin-bottom:-1px}
 
-  /* ---------- SECTIONS ---------- */
+  /* SECTIONS */
   section{padding:96px 0}
   .section-kicker{font-size:.78rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--coral);margin-bottom:14px}
   .section-title{font-size:clamp(1.9rem,4vw,2.9rem);letter-spacing:-.015em;color:var(--ink);max-width:20ch}
@@ -157,7 +157,7 @@
                       padding:5px 11px;border-radius:999px;opacity:.55;transition:all .2s}
   .lang-toggle button.active{background:var(--teal);color:#fff;opacity:1}
 
-  /* ---------- MODAL BETA ---------- */
+  /* MODAL BETA */
   .modal-overlay{position:fixed;inset:0;background:rgba(38,70,83,.45);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
                  z-index:100;display:flex;align-items:center;justify-content:center;padding:20px;
                  opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s}
@@ -210,7 +210,7 @@
   <a class="btn btn-dark" href="#comecar" data-open-modal data-en="Join the waitlist">Entrar na lista</a>
 </nav>
 
-<!-- ================= HERO ================= -->
+<!-- HERO -->
 <header class="hero">
   <div class="container">
     <span class="badge"><span class="dot"></span><span data-en="AI study planner · beta">Planner de estudos com IA · beta</span></span>
@@ -257,7 +257,7 @@
 
 <svg class="wave" viewBox="0 0 1440 70" preserveAspectRatio="none"><path d="M0 70V38C120 12 260 6 420 22s300 34 470 22 330-30 550-6v32z" fill="#F5F0E1"/><path d="M0 70V50c160-22 320-26 480-10s300 28 470 16 320-24 490-6v20z" fill="#F5F0E1" opacity=".55"/></svg>
 
-<!-- ================= COMO FUNCIONA ================= -->
+<!-- COMO FUNCIONA -->
 <section id="como">
   <div class="container split">
     <div class="reveal">
@@ -298,9 +298,9 @@
   </div>
 </section>
 
-<svg class="wave" viewBox="0 0 1440 70" preserveAspectRatio="none" style="margin-top:-1px"><path d="M0 0v32c180 20 340 26 500 12s320-30 480-16 300 22 460 8V0z" fill="#E9C46A"/></svg>
+<svg class="wave" viewBox="0 0 1440 70" preserveAspectRatio="none" style="margin-top:-1px; transform: scaleY(-1);"><path d="M0 0v32c180 20 340 26 500 12s320-30 480-16 300 22 460 8V0z" fill="#E9C46A"/></svg>
 
-<!-- ================= PASSOS ================= -->
+<!-- PASSOS -->
 <section class="steps" id="passos" style="padding-top:70px">
   <div class="container">
     <p class="section-kicker" style="color:var(--teal)" data-en="First steps">Primeiros passos</p>
@@ -327,7 +327,7 @@
 
 <svg class="wave" viewBox="0 0 1440 70" preserveAspectRatio="none"><path d="M0 0v30c200 18 380 24 560 10s340-28 520-14 240 18 360 12V0z" fill="#E9C46A" transform="translate(0,0)"/><path d="M0 70V34c160-18 320-24 480-8s320 30 480 16 300-24 480-8v36z" fill="#F5F0E1"/></svg>
 
-<!-- ================= MISSÃO ================= -->
+<!-- MISSÃO -->
 <div class="mission-outer">
   <div class="mission reveal">
     <svg class="scribble" width="70" height="52" viewBox="0 0 70 52" fill="none">
@@ -339,7 +339,7 @@
   </div>
 </div>
 
-<!-- ================= FAQ ================= -->
+<!-- FAQ -->
 <section id="faq" style="padding-top:40px">
   <div class="container">
     <p class="section-kicker" data-en="Frequently asked questions">Dúvidas frequentes</p>
@@ -361,14 +361,14 @@
   </div>
 </section>
 
-<!-- ================= CTA FINAL ================= -->
+<!-- CTA FINAL -->
 <div class="final" id="comecar">
   <h2 data-en="Your next study plan builds itself.">Seu próximo plano de estudos se monta sozinho.</h2>
   <p data-en="Join the beta waitlist and be one of the first to study with a plan made for your routine — not against it.">Entre na lista do beta e seja uma das primeiras pessoas a estudar com um plano feito pra sua rotina — e não contra ela.</p>
   <a class="btn btn-coral" href="#comecar" data-open-modal data-en="Join the beta waitlist">Entrar na lista do beta</a>
 </div>
 
-<!-- ================= MODAL BETA ================= -->
+<!-- MODAL BETA -->
 <div class="modal-overlay" id="betaModal">
   <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
     <button class="modal-close" id="modalClose" aria-label="Fechar">
