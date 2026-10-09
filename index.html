@@ -432,9 +432,7 @@
   document.getElementById('langEn').addEventListener('click',()=>setLang('en'));
 
   // beta modal
-  // Para receber os e-mails de verdade: crie um form grátis em formspree.io
-  // apontando pro seu e-mail e cole a URL gerada abaixo (ex: https://formspree.io/f/abcdwxyz)
-  const FORMSPREE_ENDPOINT = "";
+  const FORMSPREE_ENDPOINT = "https://formspree.io/f/mwlvowde";
   const overlay = document.getElementById('betaModal');
   const openModal = ()=>{ overlay.classList.add('open'); document.body.style.overflow='hidden'; setTimeout(()=>document.getElementById('betaName').focus(),350); };
   const closeModal = ()=>{ overlay.classList.remove('open'); document.body.style.overflow=''; };
