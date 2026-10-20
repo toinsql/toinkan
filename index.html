@@ -6,6 +6,12 @@
 <title data-pt="ToinkanAI — Seu plano de estudos, montado por IA" data-en="ToinkanAI — Your study plan, built by AI">ToinkanAI — Seu plano de estudos, montado por IA</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 22 22' fill='none'%3E%3Crect x='1.5' y='3' width='19' height='15.5' rx='3.5' stroke='%23264653' stroke-width='2' fill='%23F5F0E1'/%3E%3Cpath d='M5 8.5h7M5 12h4.5' stroke='%23F4A261' stroke-width='2' stroke-linecap='round'/%3E%3Ccircle cx='16.5' cy='8.5' r='1.6' fill='%23E9C46A'/%3E%3C/svg%3E">
 <meta name="description" data-pt="O ToinkanAI usa IA para montar um plano de estudos semanal que cabe na sua rotina. Você diz o que precisa aprender, nós organizamos o caminho." data-en="ToinkanAI uses AI to build a weekly study plan that fits your routine. You say what you need to learn, we organize the path." content="O ToinkanAI usa IA para montar um plano de estudos semanal que cabe na sua rotina. Você diz o que precisa aprender, nós organizamos o caminho.">
+<link rel="canonical" href="https://www.toinkan.online/">
+<meta name="theme-color" content="#F5F0E1">
+<meta property="og:type" content="website"><meta property="og:site_name" content="ToinkanAI"><meta property="og:locale" content="pt_BR"><meta property="og:url" content="https://www.toinkan.online/">
+<meta property="og:title" content="ToinkanAI — Seu plano de estudos, montado por IA">
+<meta property="og:description" content="Você diz o que quer aprender. A IA monta o plano semanal que cabe na sua rotina.">
+<meta name="twitter:card" content="summary">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,400;7..72,600;7..72,700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -183,6 +189,12 @@
   .modal .success h3{margin-bottom:6px}
   .modal .success p{font-size:.9rem;opacity:.75}
 
+  .about{padding:40px 0 96px}.info-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:44px}@media(max-width:860px){.info-grid{grid-template-columns:1fr}}
+  .info-card{background:#fff;border:2px solid var(--teal);border-radius:22px;padding:28px 26px;box-shadow:6px 8px 0 rgba(38,70,83,.12)}
+  .info-card h3{font-size:1.1rem;color:var(--ink);margin-bottom:10px}.info-card p,.info-card li{font-size:.9rem;opacity:.85}
+  .info-card ul{list-style:none;display:grid;gap:9px}.info-card a{color:var(--teal);font-weight:600}
+  .form-err{display:none;color:#b3261e;font-size:.8rem;margin-top:10px;text-align:center}.hp{position:absolute!important;left:-9999px}
+  footer .links{display:flex;gap:18px}
   /* reveal animation */
   .reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease}
   .reveal.visible{opacity:1;transform:none}
@@ -206,6 +218,7 @@
   <div class="links">
     <a href="#como" data-en="How it works">Como funciona</a>
     <a href="#passos" data-en="First steps">Primeiros passos</a>
+    <a href="#quem-faz" data-en="About">Quem faz</a>
     <a href="#faq" data-en="FAQ">Dúvidas</a>
   </div>
   <a class="btn btn-dark" href="#comecar" data-open-modal data-en="Join the waitlist">Entrar na lista</a>
@@ -236,20 +249,20 @@
       <div class="planner">
         <div class="planner-head">
           <h3 data-en="Your week · Civil service exam">Sua semana · Concurso TJ</h3>
-          <span class="tag" data-en="Reviewed today at 7am">Revisado hoje às 7h</span>
+          <span class="tag" data-en="Sample plan">Exemplo de plano</span>
         </div>
         <div class="week">
           <div class="day"><span class="d" data-en="Mon">Seg</span><span class="task t-coral" data-en="Constitutional Law · 1h30">Direito Constitucional · 1h30</span><span class="task t-gold" data-en="30 practice questions">30 questões</span></div>
           <div class="day"><span class="d" data-en="Tue">Ter</span><span class="task t-mint" data-en="Portuguese: syntax · 1h">Português: sintaxe · 1h</span></div>
-          <div class="day"><span class="d" data-en="Wed">Qua</span><span class="task t-coral" data-en="Constitutional: review · 45min">Constitucional: revisão · 45min</span><span class="task t-outline" data-en="Break at 8pm">Folga 20h</span></div>
+          <div class="day"><span class="d" data-en="Wed">Qua</span><span class="task t-coral" data-en="Constitutional: review · 45min">Constitucional: revisão · 45min</span><span class="task t-outline" data-en="Light day">Dia leve</span></div>
           <div class="day"><span class="d" data-en="Thu">Qui</span><span class="task t-gold" data-en="Logical reasoning · 1h">Raciocínio lógico · 1h</span><span class="task t-mint" data-en="Flashcards · 20min">Flashcards · 20min</span></div>
-          <div class="day"><span class="d" data-en="Fri">Sex</span><span class="task t-coral" data-en="Mock exam · 2h">Simulado · 2h</span></div>
-          <div class="day"><span class="d" data-en="Sat">Sáb</span><span class="task t-mint" data-en="Mock exam review · 1h">Correção do simulado · 1h</span></div>
-          <div class="day"><span class="d" data-en="Sun">Dom</span><span class="task t-outline" data-en="Rest day">Descanso</span></div>
+          <div class="day"><span class="d" data-en="Fri">Sex</span><span class="task t-coral" data-en="General review · 1h">Revisão geral · 1h</span></div>
+          <div class="day"><span class="d" data-en="Sat">Sáb</span><span class="task t-coral" data-en="Mock exam · 2h">Simulado · 2h</span></div>
+          <div class="day"><span class="d" data-en="Sun">Dom</span><span class="task t-mint" data-en="Mock exam review · 1h">Correção do simulado · 1h</span></div>
         </div>
         <div class="planner-foot">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1.5l1.8 3.9 4.2.5-3.1 2.9.8 4.2L8 11l-3.7 2 .8-4.2L2 5.9l4.2-.5z" stroke="#F4A261" stroke-width="1.4" stroke-linejoin="round"/></svg>
-          <span data-en="The AI noticed you focus best in the morning and front-loaded the heavy content before 10am.">A IA percebeu que você rende mais de manhã e concentrou o conteúdo pesado antes das 10h.</span>
+          <span data-en="The AI saw you can't study in the morning: every session sits between 7pm and 8:30pm and the heavy content goes to the weekend.">A IA viu que você não estuda de manhã: todas as sessões ficam entre 19h e 20h30 e o conteúdo pesado vai pro fim de semana.</span>
         </div>
       </div>
     </div>
@@ -340,6 +353,27 @@
   </div>
 </div>
 
+<!-- QUEM FAZ -->
+<section class="about" id="quem-faz">
+  <div class="container">
+    <p class="section-kicker" data-en="Behind ToinkanAI">Por trás do ToinkanAI</p>
+    <h2 class="section-title" data-en="Built in the open, step by step">Construído às claras, passo a passo</h2>
+    <div class="info-grid reveal">
+      <div class="info-card"><h3 data-en="Technology">Tecnologia</h3>
+        <p data-en="The planning engine is built on the Claude API from Anthropic: it turns your goal and routine into structured weekly sessions, and re-plans when you fall behind.">O motor de planejamento é construído sobre a API do Claude, da Anthropic: ele transforma sua meta e sua rotina em sessões semanais estruturadas e replaneja quando você atrasa.</p></div>
+      <div class="info-card"><h3 data-en="Roadmap">Roadmap</h3>
+        <ul>
+          <li><b data-en="Now:">Agora:</b> <span data-en="waitlist and prototype">lista de espera e protótipo</span></li>
+          <li><b data-en="Next:">Próximo:</b> <span data-en="closed beta with real plan generation">beta fechado com geração real de planos</span></li>
+          <li><b data-en="Later:">Depois:</b> <span data-en="auto re-planning, calendar export (.ics), flashcards">replanejamento automático, exportar pro calendário (.ics), flashcards</span></li>
+        </ul></div>
+      <div class="info-card"><h3 data-en="Who builds it">Quem faz</h3>
+        <p data-en="Made by Toin, a student and full-stack developer in Brazil. Follow the code and progress on GitHub.">Feito por Toin, estudante e desenvolvedor full-stack no Brasil. Acompanhe o código e o progresso no GitHub.</p>
+        <p style="margin-top:12px"><a href="https://github.com/toinsql/toinkan" target="_blank" rel="noopener">github.com/toinsql/toinkan</a></p></div>
+    </div>
+  </div>
+</section>
+
 <!-- FAQ -->
 <section id="faq" style="padding-top:40px">
   <div class="container">
@@ -383,9 +417,11 @@
         <input type="text" id="betaName" name="name" data-pt-ph="Como podemos te chamar?" placeholder="Como podemos te chamar?" data-en-ph="What can we call you?" required>
         <label for="betaEmail" data-en="Your best email">Seu melhor e-mail</label>
         <input type="email" id="betaEmail" name="email" data-pt-ph="voce@exemplo.com" placeholder="voce@exemplo.com" data-en-ph="you@example.com" required>
+        <input type="text" id="betaHp" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
         <button type="submit" class="btn btn-coral" id="betaSubmit" data-en="Join the waitlist">Quero entrar na lista</button>
+        <p class="form-err" id="betaErr" role="alert" data-en="Something went wrong. Please try again or email us.">Algo deu errado. Tente de novo ou escreva pra gente.</p>
       </form>
-      <p class="privacy" data-en="No spam, we promise. Just launch updates.">Sem spam, prometido. Só avisos sobre o lançamento.</p>
+      <p class="privacy" data-en="No spam. Just launch updates. By joining you agree to our <a href='/privacidade.html'>Privacy Policy</a>.">Sem spam. Só avisos do lançamento. Ao entrar, você concorda com a <a href='/privacidade.html'>Política de Privacidade</a>.</p>
     </div>
     <div class="success" id="modalSuccess">
       <svg width="52" height="52" viewBox="0 0 52 52" fill="none">
@@ -401,7 +437,7 @@
 <footer>
   <div class="container">
     <span class="f-logo">ToinkanAI</span>
-    <a href="mailto:contact@toinkan.online">contact@toinkan.online</a>
+    <span class="links"><a href="mailto:contact@toinkan.online">contact@toinkan.online</a><a href="/privacidade.html" data-en="Privacy">Privacidade</a><a href="/termos.html" data-en="Terms">Termos</a></span>
     <span class="small" data-en="© 2026 ToinkanAI · Made with care in Brazil">© 2026 ToinkanAI · Feito com carinho no Brasil</span>
   </div>
 </footer>
@@ -454,13 +490,14 @@
     btn.textContent = 'Enviando...'; btn.disabled = true;
     try{
       if(FORMSPREE_ENDPOINT){
-        await fetch(FORMSPREE_ENDPOINT, {
+        const res = await fetch(FORMSPREE_ENDPOINT, {
           method:'POST',
           headers:{'Content-Type':'application/json','Accept':'application/json'},
-          body: JSON.stringify({name, email, _subject:'Novo cadastro no beta do ToinkanAI'})
+          body: JSON.stringify({name, email, _gotcha:document.getElementById('betaHp').value, _subject:'Novo cadastro no beta do ToinkanAI'})
         });
+        if(!res.ok) throw new Error('bad');
       }
-    }catch(err){ /* mesmo com falha de rede, mostra confirmação */ }
+    }catch(err){ btn.disabled=false; btn.textContent = document.documentElement.lang==='en' ? btn.dataset.en : btn.dataset.pt; document.getElementById('betaErr').style.display='block'; return; }
     document.getElementById('modalForm').style.display='none';
     document.getElementById('modalSuccess').style.display='block';
   });
