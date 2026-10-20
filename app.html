@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ToinkanAI — App</title>
+<link href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,400;7..72,700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--cream:#F5F0E1;--coral:#F4A261;--gold:#E9C46A;--mint:#A8DADC;--teal:#264653}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Poppins',sans-serif;background:var(--cream);color:var(--teal);line-height:1.5}
+  h1,h2,h3{font-family:'Literata',serif;font-weight:700}
+  header{display:flex;justify-content:space-between;align-items:center;max-width:1120px;margin:0 auto;padding:20px 24px}
+  header a{color:var(--teal);font-family:'Literata',serif;font-weight:700;font-size:1.2rem;text-decoration:none}
+  main{max-width:1120px;margin:0 auto;padding:0 24px 60px}
+  .card{background:#fff8;border:1.5px solid rgba(38,70,83,.14);border-radius:22px;padding:24px;box-shadow:0 8px 30px rgba(38,70,83,.08)}
+  form{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:16px}
+  label{font-size:.8rem;font-weight:600;display:flex;flex-direction:column;gap:6px}
+  input,select{font:inherit;padding:10px 14px;border-radius:12px;border:1.5px solid rgba(38,70,83,.25);background:var(--cream);color:var(--teal)}
+  .days{display:flex;gap:6px;flex-wrap:wrap}
+  .days label{flex-direction:row;align-items:center;gap:4px;font-weight:500;background:var(--mint);padding:6px 10px;border-radius:999px}
+  .btn{font:inherit;font-weight:600;font-size:.9rem;border:0;cursor:pointer;padding:12px 24px;border-radius:999px;background:var(--coral);color:var(--teal);transition:transform .15s}
+  .btn:hover{transform:translateY(-2px)}
+  .btn.alt{background:var(--teal);color:var(--cream)}
+  .btn:disabled{opacity:.5;cursor:wait}
+  .bar{display:flex;gap:10px;flex-wrap:wrap;margin:24px 0 16px;align-items:center}
+  .bar h2{flex:1}
+  .week{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px}
+  .col h3{font-size:.95rem;margin-bottom:8px}
+  .s{border-radius:14px;padding:10px 12px;margin-bottom:8px;font-size:.8rem;cursor:pointer;border:1.5px solid rgba(38,70,83,.15);background:var(--gold)}
+  .s.revisão{background:var(--mint)} .s.simulado{background:var(--coral)}
+  .s.done{opacity:.5;text-decoration:line-through}
+  .s b{display:block;font-size:.75rem}
+  .s small{opacity:.75}
+  #msg{margin-top:12px;font-size:.85rem;font-weight:500}
+  .hide{display:none}
+</style>
+</head>
+<body>
+<header><a href="/">ToinkanAI</a><span style="font-size:.85rem">MVP</span></header>
+<main>
+  <section class="card" id="onb">
+    <h2>Monte seu plano</h2>
+    <form id="f">
+      <label>Meta<input name="meta" required minlength="3" maxlength="300" placeholder="Ex.: passar na prova da OAB"></label>
+      <label>Prazo<input name="prazo" required placeholder="Ex.: 8 semanas ou 2026-12-15"></label>
+      <label>Horas por dia<input name="horas" type="number" min="0.5" max="12" step="0.5" value="2" required></label>
+      <label>Melhor horário<select name="horario"><option value="manha">Manhã</option><option value="tarde">Tarde</option><option value="noite" selected>Noite</option></select></label>
+      <label style="grid-column:1/-1">Dias disponíveis<span class="days" id="days"></span></label>
+      <div><button class="btn" id="go">Gerar plano</button></div>
+    </form>
+    <p id="msg"></p>
+  </section>
+  <section id="plan" class="hide">
+    <div class="bar">
+      <h2>Sua semana</h2>
+      <button class="btn" id="re">Replanejar semana</button>
+      <button class="btn alt" id="ics">Exportar .ics</button>
+    </div>
+    <div class="week" id="week"></div>
+  </section>
+</main>
+<script>
+const DIAS=["seg","ter","qua","qui","sex","sab","dom"], NOMES=["Segunda","Terça","Quarta","Quinta","Sexta","Sábado","Domingo"];
+const $=id=>document.getElementById(id);
+let state=JSON.parse(localStorage.getItem("toinkan")||"null"); // {plano, sessoes:[{...,feita}]}
+$("days").innerHTML=DIAS.map((d,i)=>`<label><input type="checkbox" value="${d}" ${i<5?"checked":""}>${NOMES[i].slice(0,3)}</label>`).join("");
+const save=()=>localStorage.setItem("toinkan",JSON.stringify(state));
+const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+function render(){
+  if(!state)return;
+  $("plan").classList.remove("hide");
+  $("week").innerHTML=DIAS.map((d,i)=>{
+    const items=state.sessoes.map((s,idx)=>({s,idx})).filter(x=>x.s.dia===d).sort((a,b)=>a.s.inicio.localeCompare(b.s.inicio));
+    if(!items.length)return"";
+    return`<div class="col"><h3>${NOMES[i]}</h3>${items.map(({s,idx})=>`<div class="s ${s.tipo} ${s.feita?"done":""}" data-i="${idx}"><b>${s.inicio}–${s.fim} · ${s.tipo}</b>${esc(s.topico)}</div>`).join("")}</div>`;
+  }).join("");
+}
+$("week").onclick=e=>{const el=e.target.closest(".s");if(!el)return;const s=state.sessoes[el.dataset.i];s.feita=!s.feita;save();render()};
+
+async function call(url,body,btn){
+  btn.disabled=true;$("msg").textContent="Gerando com IA…";
+  try{
+    const r=await fetch(url,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
+    const j=await r.json(); if(!r.ok)throw new Error(j.error||"Erro");
+    $("msg").textContent="";return j;
+  }catch(e){$("msg").textContent=e.message;alert(e.message)}finally{btn.disabled=false}
+}
+$("f").onsubmit=async e=>{
+  e.preventDefault();const f=e.target;
+  const dias=[...document.querySelectorAll("#days input:checked")].map(i=>i.value);
+  if(!dias.length)return alert("Escolha ao menos um dia.");
+  const plano={meta:f.meta.value,prazo:f.prazo.value,horas_por_dia:+f.horas.value,dias_disponiveis:dias,melhor_horario:f.horario.value};
+  const j=await call("/api/plan",plano,$("go")); if(!j)return;
+  state={plano,sessoes:j.sessoes};save();render();
+};
+$("re").onclick=async()=>{
+  const concluidas=state.sessoes.flatMap((s,i)=>s.feita?[i]:[]);
+  const j=await call("/api/replan",{plano:state.plano,sessoes:state.sessoes,concluidas},$("re")); if(!j)return;
+  const feitas=state.sessoes.filter(s=>s.feita);
+  state.sessoes=[...feitas,...j.sessoes.map(s=>({...s,feita:false}))];save();render();
+};
+// .ics: ancora a semana na próxima ocorrência de cada dia; repete semanalmente
+$("ics").onclick=()=>{
+  const pad=n=>String(n).padStart(2,"0"),now=new Date();
+  const ev=state.sessoes.map((s,i)=>{
+    const d=new Date(now);const target=(DIAS.indexOf(s.dia)+1)%7; // JS: dom=0
+    d.setDate(d.getDate()+((target-d.getDay()+7)%7));
+    const ymd=`${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}`;
+    const t=h=>h.replace(":","")+"00";
+    return["BEGIN:VEVENT",`UID:toinkan-${Date.now()}-${i}@toinkan.online`,`DTSTAMP:${now.toISOString().replace(/[-:]|\.\d+/g,"")}`,
+      `DTSTART:${ymd}T${t(s.inicio)}`,`DTEND:${ymd}T${t(s.fim)}`,`SUMMARY:${s.tipo}: ${s.topico.replace(/[,;\n]/g," ")}`,"RRULE:FREQ=WEEKLY;COUNT=4","END:VEVENT"].join("\r\n");
+  });
+  const ics=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//ToinkanAI//PT","CALSCALE:GREGORIAN",...ev,"END:VCALENDAR"].join("\r\n");
+  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([ics],{type:"text/calendar"}));a.download="toinkan-plano.ics";a.click();
+};
+render();
+</script>
+</body>
+</html>
