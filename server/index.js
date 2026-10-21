@@ -31,5 +31,8 @@ for (const f of ["index.html", "privacidade.html", "termos.html", "demo.js", "ro
 app.get(["/app", "/app.html"], (_, res) => res.sendFile(path.join(root, "app.html")));
 app.use("/docs", express.static(path.join(root, "docs")));
 
-const port = process.env.PORT || 3000;
-app.listen(port, () => console.log(`http://localhost:${port}`));
+export default app;
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
+  const port = process.env.PORT || 3000;
+  app.listen(port, () => console.log(`http://localhost:${port}`));
+}
