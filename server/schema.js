@@ -9,6 +9,7 @@ export const PlanRequest = z.object({
   horas_por_dia: z.number().min(0.5).max(12),
   dias_disponiveis: z.array(z.enum(DIAS)).min(1).max(7),
   melhor_horario: z.enum(["manha", "tarde", "noite"]),
+  idioma: z.enum(["pt", "en"]).optional(), // idioma da interface; usado pela demo
 });
 
 export const Session = z

@@ -19,3 +19,10 @@ test("replan demo redistribui só as atrasadas", () => {
   const { sessoes } = demoPlan(req);
   assert.equal(demoReplan({ plano: req, sessoes, concluidas: [0, 1] }).sessoes.length, sessoes.length - 2);
 });
+
+test("demo segue o idioma pedido (en) e mantém tipo do schema", () => {
+  const { sessoes } = demoPlan({ ...req, idioma: "en" });
+  assert.ok(PlanResponse.safeParse({ sessoes }).success);
+  assert.match(sessoes.at(-1).topico, /weekly mock exam/);
+  assert.match(demoPlan(req).sessoes.at(-1).topico, /simulado da semana/);
+});
