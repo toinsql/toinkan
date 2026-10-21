@@ -1,7 +1,7 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { PlanResponse, extractJson } from "./schema.js";
 
-export const MODEL = "claude-sonnet-4-6";
+export const MODEL = process.env.CLAUDE_MODEL || "claude-sonnet-4-6";
 const MAX_TOKENS = Number(process.env.MAX_OUTPUT_TOKENS) || 2500;
 const RETRIES = 2; // tentativas extras se o JSON vier inválido
 
