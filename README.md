@@ -54,7 +54,13 @@ npm start              # http://localhost:3000  (app at /app)
 npm test
 ```
 
-> The landing on GitHub Pages is static; `/app` and `/api` need the Node server hosted elsewhere (Render, Fly, etc.).
+### Demo mode (no API cost)
+
+Without `ANTHROPIC_API_KEY` (or with `DEMO_MODE=true`) the server returns rule-based sample plans from `demo.js`. **No AI is called.** `app.html` also falls back to `demo.js` in the browser when `/api` is unavailable (e.g. GitHub Pages) and shows a "demo mode" banner. Set a key to get real plans from Claude.
+
+Env vars: `CLAUDE_MODEL` (default `claude-sonnet-4-6`), `DAILY_LIMIT_PER_IP`, `GLOBAL_DAILY_LIMIT`, `MAX_OUTPUT_TOKENS`, `DEMO_MODE`. The server uses `trust proxy`, so rate limits see the real client IP behind Render/Fly.
+
+> Only real AI plans need the Node server hosted elsewhere (Render, Fly, etc.); the demo works on static hosting at `/app.html`.
 
 ---
 
@@ -99,4 +105,10 @@ npm start              # http://localhost:3000  (app em /app)
 npm test
 ```
 
-> A landing no GitHub Pages é estática; `/app` e `/api` precisam do servidor Node hospedado em outro lugar.
+### Modo demo (sem custo de API)
+
+Sem `ANTHROPIC_API_KEY` (ou com `DEMO_MODE=true`) o servidor devolve planos de exemplo por regras, vindos de `demo.js`. **Nenhuma IA é chamada.** O `app.html` também cai no `demo.js` dentro do navegador quando `/api` não existe (ex.: GitHub Pages) e mostra um aviso de "modo demonstração". Com uma chave, os planos reais vêm do Claude.
+
+Variáveis: `CLAUDE_MODEL` (padrão `claude-sonnet-4-6`), `DAILY_LIMIT_PER_IP`, `GLOBAL_DAILY_LIMIT`, `MAX_OUTPUT_TOKENS`, `DEMO_MODE`. O servidor usa `trust proxy`, então o limite enxerga o IP real atrás de Render/Fly.
+
+> Só os planos reais com IA precisam do servidor Node hospedado (Render, Fly etc.); a demo funciona em hospedagem estática em `/app.html`.
