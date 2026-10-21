@@ -454,6 +454,7 @@
   const translatables = document.querySelectorAll('[data-en]');
   translatables.forEach(el=>{ el.dataset.pt = el.innerHTML; });
   const setLang = (lang)=>{
+    try{ localStorage.setItem('toinkan.lang', lang==='en' ? 'en' : 'pt'); }catch(e){}
     translatables.forEach(el=>{ el.innerHTML = lang==='en' ? el.dataset.en : el.dataset.pt; });
     document.querySelectorAll('[data-en-ph]').forEach(el=>{
       if(!el.dataset.ptPh) el.dataset.ptPh = el.getAttribute('data-pt-ph') || 'Como podemos te chamar?';
@@ -465,6 +466,7 @@
     document.getElementById('langPt').classList.toggle('active', lang!=='en');
     document.getElementById('langEn').classList.toggle('active', lang==='en');
   };
+  if(localStorage.getItem('toinkan.lang')==='en') setLang('en');
   document.getElementById('langPt').addEventListener('click',()=>setLang('pt'));
   document.getElementById('langEn').addEventListener('click',()=>setLang('en'));
 
