@@ -1,5 +1,6 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { PlanResponse, extractJson } from "./schema.js";
+import { demoPlan, demoReplan } from "../demo.js";
 
 export const MODEL = process.env.CLAUDE_MODEL || "claude-sonnet-4-6";
 const MAX_TOKENS = Number(process.env.MAX_OUTPUT_TOKENS) || 2500;
@@ -42,10 +43,16 @@ async function askJson(userContent) {
   throw new Error("Claude retornou JSON inválido: " + lastErr?.message);
 }
 
+// Sem chave (ou com DEMO_MODE=true) o servidor responde com o plano de demonstração, sem chamar o Claude.
+export const isDemo = () => process.env.DEMO_MODE === "true" || !process.env.ANTHROPIC_API_KEY;
+
 export const generatePlan = (req) =>
-  askJson(`Monte o plano semanal.\n<dados>${JSON.stringify(req)}</dados>`);
+  isDemo()
+    ? { ...demoPlan(req), demo: true }
+    : askJson(`Monte o plano semanal.\n<dados>${JSON.stringify(req)}</dados>`);
 
 export function replan({ plano, sessoes, concluidas }) {
+  if (isDemo()) return { ...demoReplan({ plano, sessoes, concluidas }), demo: true };
   const done = new Set(concluidas);
   const feitas = sessoes.filter((_, i) => done.has(i));
   const atrasadas = sessoes.filter((_, i) => !done.has(i));
