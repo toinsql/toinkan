@@ -57,6 +57,7 @@
       <button class="btn" id="re">Replanejar semana</button>
       <button class="btn alt" id="ics">Exportar .ics</button>
     </div>
+    <p id="demo" class="hide" style="margin:0 0 14px;padding:10px 14px;border:2px dashed #264653;border-radius:12px;font-size:.85rem;background:#fff">Modo demonstração: este plano é de exemplo e foi gerado por regras, sem IA. O plano real com Claude chega no beta.</p>
     <div class="week" id="week"></div>
   </section>
 </main>
@@ -71,6 +72,7 @@ const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&qu
 function render(){
   if(!state)return;
   $("plan").classList.remove("hide");
+  $("demo").classList.toggle("hide",!state.demo);
   $("week").innerHTML=DIAS.map((d,i)=>{
     const items=state.sessoes.map((s,idx)=>({s,idx})).filter(x=>x.s.dia===d).sort((a,b)=>a.s.inicio.localeCompare(b.s.inicio));
     if(!items.length)return"";
@@ -80,10 +82,14 @@ function render(){
 $("week").onclick=e=>{const el=e.target.closest(".s");if(!el)return;const s=state.sessoes[el.dataset.i];s.feita=!s.feita;save();render()};
 
 async function call(url,body,btn){
-  btn.disabled=true;$("msg").textContent="Gerando com IA…";
+  btn.disabled=true;$("msg").textContent="Gerando…";
   try{
-    const r=await fetch(url,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
-    const j=await r.json(); if(!r.ok)throw new Error(j.error||"Erro");
+    let j,ok=false;
+    try{ // sem backend (ex.: GitHub Pages) cai no modo demo, que roda no navegador
+      const r=await fetch(url,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
+      if(r.status!==404&&r.status!==405){j=await r.json();if(!r.ok)throw new Error(j.error||"Erro");ok=true}
+    }catch(e){if(!(e instanceof TypeError))throw e}
+    if(!ok){const D=await import("/demo.js");j={...(url==="/api/plan"?D.demoPlan(body):D.demoReplan(body)),demo:true}}
     $("msg").textContent="";return j;
   }catch(e){$("msg").textContent=e.message;alert(e.message)}finally{btn.disabled=false}
 }
@@ -93,12 +99,13 @@ $("f").onsubmit=async e=>{
   if(!dias.length)return alert("Escolha ao menos um dia.");
   const plano={meta:f.meta.value,prazo:f.prazo.value,horas_por_dia:+f.horas.value,dias_disponiveis:dias,melhor_horario:f.horario.value};
   const j=await call("/api/plan",plano,$("go")); if(!j)return;
-  state={plano,sessoes:j.sessoes};save();render();
+  state={plano,sessoes:j.sessoes,demo:!!j.demo};save();render();
 };
 $("re").onclick=async()=>{
   const concluidas=state.sessoes.flatMap((s,i)=>s.feita?[i]:[]);
   const j=await call("/api/replan",{plano:state.plano,sessoes:state.sessoes,concluidas},$("re")); if(!j)return;
   const feitas=state.sessoes.filter(s=>s.feita);
+  state.demo=state.demo||!!j.demo;
   state.sessoes=[...feitas,...j.sessoes.map(s=>({...s,feita:false}))];save();render();
 };
 // .ics: ancora a semana na próxima ocorrência de cada dia; repete semanalmente
