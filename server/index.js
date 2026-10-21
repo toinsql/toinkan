@@ -8,6 +8,7 @@ import { dailyLimit } from "./limits.js";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const app = express();
+app.set("trust proxy", 1); // atrás de proxy (Render/Fly), req.ip passa a ser o IP real do cliente
 app.use(express.json({ limit: "20kb" })); // limita o tamanho de entrada (e tokens de entrada)
 
 const handler = (schema, fn) => async (req, res) => {
